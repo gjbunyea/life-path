@@ -1,7 +1,7 @@
-var player, loveInterest;
+var player, center;
 
 function setup(){
-  createCanvas(800, 400);
+  createCanvas(400, 400);
 
   player = createSprite(20,20,20,20);
   player.shapeColor = color(100,100,100)
@@ -9,36 +9,46 @@ function setup(){
   player.maxSpeed = 2;
   player.friction = 0.99;
 
-  score = 0;
+  intell = 30
+  happ = 40
+  wealth = 20
+  time = 100
   
-	loveInterest = createSprite(width/2, height/2, 20, 20)
-	loveInterest.shapeColor = color(255,0,0)
+	center = createSprite(width/2, height/2, 20, 20)
+	center.shapeColor = color(255,0,0)
 
-  targets = Group();
+  love = Group();
+  love_arr = {"intell":0, "happ":5, "wealth":-5, "time":-10}
   spriteArray = [];
+
 }
 
 function draw(){
   background(255,255,255);
 
+  text("Intelligence: "+intell+
+      "\nWealth: "+wealth+
+      "\nHappiness: "+happ+
+      "\nTime: "+time, 
+      300,300);
+
   player.attractionPoint(.6,width/2,height/2)
 
   for (var i=0; i<allSprites.length; i++){
     if(player.overlap(allSprites[i])){
+      curr = allSprites[i]
+      if(love.contains(curr)){
+        intell += love_arr.intell
+        happ += love_arr.happ
+        wealth += love_arr.wealth
+        time += love_arr.time
+      } 
       allSprites[i].remove();
-      score += 1
     }
   }
 
-  textAlign(RIGHT, TOP);
-  text("SCORE: "+score, width-10, 10);
-
   drawSprites();
   updatePlayer();
-	if(player.overlap(loveInterest)){
-		console.log("next scene")
-		player.speed = 0;
-	}
 
   if(allSprites.length < 5){
     drawRandomSprites();
@@ -48,11 +58,9 @@ function draw(){
 function drawRandomSprites(){
   var spr = createSprite(random(width),random(height),20,20); 
   spr.shapeColor = color(0,182,255)
-  spr.life = 60
-
+  spr.life = 60; 
   
-  spr.addToGroup(targets)
-
+  spr.addToGroup(love)
 }
 
 function updatePlayer() {
