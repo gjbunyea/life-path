@@ -3,20 +3,20 @@ var player, center;
 function setup(){
   createCanvas(400, 400);
 
+  // player mechanics
   player = createSprite(20,20,20,20);
   player.shapeColor = color(100,100,100)
 	player.rotateToDirection = true;
   player.maxSpeed = 2;
   player.friction = 0.99;
 
+  // base stats
   intell = 30
   happ = 40
   wealth = 20
   time = 100
-  
-	center = createSprite(width/2, height/2, 20, 20)
-	center.shapeColor = color(255,0,0)
 
+  // sprite init and compontent values
   life_components = ["love", "work","fitness","art","heartbreak","badwork","drinking"]
 
   love = Group();
@@ -43,8 +43,14 @@ function setup(){
   badwork_img = loadImage("assets/badwork.png")
   drinking_img = loadImage("assets/drinking.png")
 
+  // center door
+//  door_img = loadImage("assets/door.png")
+//  next_stage = Group()
+//	center = createSprite(width/2, height/2, 20, 20)
+//	center.addImage(door_img)
+//  center.addToGroup(next_stage)
+  
   spriteArray = [];
-
 }
 
 function draw(){
@@ -56,7 +62,13 @@ function draw(){
       "\nTime: "+time, 
       300,300);
 
-  player.attractionPoint(.01,width/2,height/2)
+//  player.attractionPoint(.01,width/2,height/2)
+
+  if(time <= 0){
+    console.log("yep")
+    window.location("stage2.html")
+  }
+
 
   for (var i=0; i<allSprites.length; i++){
     if(player.overlap(allSprites[i])){
@@ -83,7 +95,7 @@ function draw(){
       else if(drinking.contains(curr)){
         arr = drinking_arr
       }
-      
+
       intell += arr.intell
       happ += arr.happ
       wealth += arr.wealth
@@ -96,7 +108,7 @@ function draw(){
   drawSprites();
   updatePlayer();
 
-  while(allSprites.length < 5){
+  while(allSprites.length < 15){
     drawRandomSprite();
   }
 }
@@ -136,15 +148,6 @@ function drawRandomSprite(){
   }
   spr.life = round(random(60,100))
   
-/*  love = Group();
-  work = Group();
-  fitness = Group();
-  art = Group()
-  heartbreak = Group()
-  badwork = Group()
-  drinking = Group()
-  reading  = Group()
-*/
 }
 
 function updatePlayer() {
